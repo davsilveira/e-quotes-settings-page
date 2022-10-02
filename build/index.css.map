@@ -1,1 +1,0 @@
-{"version":3,"file":"index.css","mappings":";;;AACC;EACC;AAAF,C","sources":["webpack://e-quotes-settings-page/./src/App.scss"],"sourcesContent":["div{\n\th2{\n\t\tbackground-color: blue;\n\t}\n}\n"],"names":[],"sourceRoot":""}
