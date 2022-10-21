@@ -1,8 +1,32 @@
 import './App.scss';
 import SettingsPanel from './SettingsPanel';
+const { __ } = wp.i18n;
+const { store } = wp.notices;
 const {	Icon } = wp.components;
 const { Fragment } = wp.element;
-const { __ } = wp.i18n;
+const { SnackbarList } = wp.components;
+const {
+	useDispatch,
+	useSelect,
+} = wp.data;
+
+const Notices = () => {
+	const notices = useSelect(
+		( select ) =>
+			select( store )
+				.getNotices()
+				.filter( ( notice ) => notice.type === 'snackbar' ),
+		[]
+	);
+	const { removeNotice } = useDispatch( store );
+	return (
+		<SnackbarList
+			className="edit-site-notices"
+			notices={ notices }
+			onRemove={ removeNotice }
+		/>
+	);
+};
 
 const App = () => {
 	return (
@@ -16,6 +40,9 @@ const App = () => {
 			</div>
 			<div className="e-quotes__main">
 				<SettingsPanel></SettingsPanel>
+			</div>
+			<div className="e-quotes__notices">
+				<Notices/>
 			</div>
 		</Fragment>
 	);
