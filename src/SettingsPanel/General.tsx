@@ -76,6 +76,11 @@ const GeneralSettings = () => {
 				value={fantasyName}
 			/>
 
+			<div>
+				<Attachment id={ mainLogo } />
+				<Icon icon="remove" onClick={ () => { setMainLogo( 0 ); } } />
+			</div>
+
 			<MediaUpload
 				onSelect={ ( media ) =>
 					setMainLogo( media.id )
@@ -85,10 +90,6 @@ const GeneralSettings = () => {
 				render={ ( { open } ) => {
 					return (
 						<>
-							<div>
-								<Attachment id={ mainLogo } />
-								<Icon icon="remove" />
-							</div>
 							<Button
 								isSecondary
 								onClick={ open }> { __( 'Choose file', 'e-quotes' ) }

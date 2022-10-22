@@ -1,3 +1,4 @@
+const { __ } = wp.i18n;
 const {
 	useState,
 	useEffect,
@@ -8,18 +9,24 @@ const {
 	Spinner,
 } = wp.components;
 
-const Attachment = ( props ) => {
+const Attachment = ( {id} ) => {
 
-	const [attachment, setAttachment] = useState({});
-	const [isAPILoaded, setIsAPILoaded] = useState(false);
+	const [attachment, setAttachment] = useState( null );
+	const [isAPILoaded, setIsAPILoaded] = useState( false );
 
 	useEffect(() => {
-		if( ! props.id ) {
-			return;
+		const media = new wp.api.models.Media( { id: id } );
+		console.log(id);
+		setIsAPILoaded( true );
+		setAttachment( null );
+
+		if( parseInt( id ) > 0 ) {
+			media.fetch().then((response) => {
+				setAttachment(response.media_details.sizes.thumbnail);
+				setIsAPILoaded(true);
+			});
 		}
-		const media = new wp.api.models.Media( { id: props.id } );
-		// TODO Use backbone to fetch: https://developer.wordpress.org/rest-api/using-the-rest-api/backbone-javascript-client/
-	}, []);
+	}, [id] );
 
 	if ( ! isAPILoaded ) {
 		return (
@@ -29,9 +36,15 @@ const Attachment = ( props ) => {
 		);
 	}
 
+	if ( isAPILoaded && attachment === null ) {
+		return (
+			<Placeholder>{ __( 'No image', 'e-quotes' ) }</Placeholder>
+		);
+	}
+
 	return (
 		<img
-			src={ attachment.src }
+			src={ attachment.source_url }
 			width={ attachment.width }
 			height={ attachment.height }
 			alt="attachment"
