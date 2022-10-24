@@ -1,3 +1,5 @@
+import './Attachment.scss';
+
 const { __ } = wp.i18n;
 const {
 	useState,
@@ -9,20 +11,33 @@ const {
 	Spinner,
 } = wp.components;
 
-const Attachment = ( {id} ) => {
+const AttachmentBox = ( { size, children } ) => {
+	size = ! size ? 'thumbnail' : size;
+	const attachmentBoxClasses = `attachment-box attachment-box--size-${size}`;
+
+	return (
+		<div className={attachmentBoxClasses}>
+			<div className="attachment-box__item">{ children }</div>
+		</div>
+	);
+}
+
+const Attachment = ( { id, imageSize = null, onClick = null } ) => {
 
 	const [attachment, setAttachment] = useState( null );
 	const [isAPILoaded, setIsAPILoaded] = useState( false );
 
+	imageSize = ! imageSize ? 'thumbnail' : imageSize;
+	onClick = ! onClick ? () => {} : onClick;
+
 	useEffect(() => {
 		const media = new wp.api.models.Media( { id: id } );
-		console.log(id);
-		setIsAPILoaded( true );
+
 		setAttachment( null );
 
 		if( parseInt( id ) > 0 ) {
 			media.fetch().then((response) => {
-				setAttachment(response.media_details.sizes.thumbnail);
+				setAttachment(response.media_details.sizes[imageSize]);
 				setIsAPILoaded(true);
 			});
 		}
@@ -38,7 +53,7 @@ const Attachment = ( {id} ) => {
 
 	if ( isAPILoaded && attachment === null ) {
 		return (
-			<Placeholder>{ __( 'No image', 'e-quotes' ) }</Placeholder>
+			<Placeholder onClick={ onClick }>{ __( 'No image selected. Click to add.', 'e-quotes' ) }</Placeholder>
 		);
 	}
 
@@ -49,8 +64,9 @@ const Attachment = ( {id} ) => {
 			height={ attachment.height }
 			alt="attachment"
 			className="attachment"
+			onClick={onClick}
 			/>
 	)
 }
 
-export default Attachment;
+export { Attachment, AttachmentBox };
