@@ -17,6 +17,7 @@ const {
 	Button,
 	BaseControl,
 	TextControl,
+	SelectControl,
 	ColorPicker,
 	Placeholder,
 	Spinner,
@@ -35,6 +36,7 @@ const GeneralSettings = () => {
 	const [ mainLogo, setMainLogo ] = useState( 0 );
 	const [ primaryColor, setPrimaryColor ] = useState();
 	const [ secondaryColor, setSecondaryColor ] = useState();
+	const [ currency, setCurrency ] = useState( '' );
 	const [ isAPILoaded, setIsAPILoaded ] = useState( false );
 
 	useEffect( () => {
@@ -48,6 +50,7 @@ const GeneralSettings = () => {
 					setMainLogo( response[ 'e_quotes_main_logo' ] );
 					setPrimaryColor( response['e_quotes_primary_color'] );
 					setSecondaryColor( response['e_quotes_secondary_color'] );
+					setCurrency( response[ 'e_quotes_currency' ] );
 					setIsAPILoaded( true );
 				});
 			}
@@ -55,12 +58,14 @@ const GeneralSettings = () => {
 	}, []);
 
 	const saveSettings = () => {
+
 		const settings = new wp.api.models.Settings( {
 			[ 'e_quotes_corporate_name' ]: corporateName,
 			[ 'e_quotes_fantasy_name' ]: fantasyName,
 			[ 'e_quotes_main_logo' ]: mainLogo,
 			[ 'e_quotes_primary_color' ]: primaryColor,
 			[ 'e_quotes_secondary_color' ]: secondaryColor,
+			[ 'e_quotes_currency' ]: currency,
 		} );
 		settings.save();
 		dispatch('core/notices').createNotice(
@@ -152,6 +157,22 @@ const GeneralSettings = () => {
 					</BaseControl>
 				</FlexBlock>
 			</Flex>
+			<FlexBlock>
+				<SelectControl
+					onChange={(currency) => setCurrency(currency)}
+					value={currency}
+					options={[
+						{
+							label: __( 'Dollar (USA)', 'equotes' ),
+							value: 'USD'
+						},
+						{
+							label: __( 'Brazilian Real', 'equotes' ),
+							value: 'BRL'
+						}
+					]}
+				/>
+			</FlexBlock>
 			<hr className="e-quotes__divider" />
 			<Button
 				isPrimary
