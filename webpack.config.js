@@ -6,8 +6,8 @@ module.exports = {
 	devServer: {
 		devMiddleware: { writeToDisk: true },
 		allowedHosts: 'auto',
-		host: 'ecotacoes-plugin.test',
-		port: 8887,
+		host: 'equotes.local',
+		port: 9887,
 		proxy: { '/build': [Object] }
 	},
 	externals: {
@@ -41,5 +41,5 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [ '.ts', '.tsx', ...(defaults.resolve ? defaults.resolve.extensions || ['.js', '.jsx'] : [])]
-	}
+	},
 };
