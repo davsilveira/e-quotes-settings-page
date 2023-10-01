@@ -41,5 +41,5 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [ '.ts', '.tsx', ...(defaults.resolve ? defaults.resolve.extensions || ['.js', '.jsx'] : [])]
-	}
+	},
 };
